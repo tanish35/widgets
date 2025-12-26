@@ -13,11 +13,7 @@ datasource db {
   provider = "postgresql"
 }
 
-enum FeedbackType {
-  BUG
-  FEATURE
-  OTHER
-}
+
 
 enum Sentiment {
   POSITIVE
@@ -56,7 +52,7 @@ model Project {
 model Feedback {
   id        String       @id @default(cuid())
   message   String
-  type      FeedbackType
+  type      String
   sentiment Sentiment?
   createdAt DateTime     @default(now())
 

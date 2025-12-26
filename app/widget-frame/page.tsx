@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
+import api from "@/lib/api";
 
 export default function WidgetFrame() {
   const params = useSearchParams();
@@ -12,10 +13,10 @@ export default function WidgetFrame() {
   const [text, setText] = useState("");
 
   async function submit() {
-    await fetch("/api/feedback", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ projectKey, type, text }),
+    await api.post("/feedback", {
+      projectKey,
+      type,
+      text,
     });
     setText("");
     alert("Thanks for the feedback!");

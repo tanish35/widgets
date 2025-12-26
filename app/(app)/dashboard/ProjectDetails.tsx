@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FeedbackList } from "@/app/(app)/dashboard/FeedbackList";
+import api from "@/lib/api";
 
 interface Feedback {
   id: number;
@@ -28,12 +29,23 @@ export function ProjectDetails({ project }: ProjectDetailsProps) {
     "All" | "Bug" | "Feature" | "Other"
   >("All");
 
+  const [loading, setLoading] = useState(false);
+
   const embedSnippet = `<script src="${process.env.NEXT_PUBLIC_APP_URL}/widget.js" data-project-key="${project.projectKey}"></script>`;
 
   const handleCopySnippet = () => {
     navigator.clipboard.writeText(embedSnippet);
     setCopiedSnippet(true);
     setTimeout(() => setCopiedSnippet(false), 2000);
+  };
+
+  const handleDeleteProject = async () => {
+    setLoading(true);
+    await api.delete("/delete-project", {
+      data: { projectKey: project.projectKey },
+    });
+    setLoading(false);
+    window.location.reload();
   };
 
   const filteredFeedbacks =
@@ -52,8 +64,10 @@ export function ProjectDetails({ project }: ProjectDetailsProps) {
             variant="destructive"
             size="sm"
             className="mt-2 bg-red-600 hover:bg-red-700"
+            onClick={handleDeleteProject}
+            disabled={loading}
           >
-            Delete Project
+            {loading ? "Deleting..." : "Delete Project"}
           </Button>
         </div>
         <div className="mt-4 flex items-center justify-between rounded-md bg-background px-3 py-2">

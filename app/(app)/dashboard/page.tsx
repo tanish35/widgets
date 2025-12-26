@@ -51,10 +51,10 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <header className="border-b border-border px-8 py-6">
-        <div className="flex items-center justify-between">
+      <header className="border-b border-border px-4 py-4 md:px-8 md:py-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-semibold">Projects</h1>
+            <h1 className="text-2xl md:text-3xl font-semibold">Projects</h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Manage your feedback widgets
             </p>
@@ -68,9 +68,9 @@ export default function Dashboard() {
         </div>
       </header>
 
-      <main className="p-8">
-        <div className="grid gap-8 lg:grid-cols-3">
-          <div className="lg:col-span-1">
+      <main className="p-4 md:p-8">
+        <div className="grid gap-4 md:gap-8 grid-cols-1 md:grid-cols-3">
+          <div className="md:col-span-1">
             <ProjectsList
               projects={projects}
               selectedProjectId={selectedProjectId}
@@ -78,7 +78,7 @@ export default function Dashboard() {
             />
           </div>
 
-          <div className="lg:col-span-2">
+          <div className="md:col-span-2">
             {selectedProject ? (
               <ProjectDetails project={selectedProject} />
             ) : (
@@ -91,8 +91,6 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
-
-      {/* Add Project Modal */}
       <AddProjectModal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}

@@ -12,7 +12,7 @@ export default async function AppLayout({
     redirect("/sign-in");
   }
   return (
-    <div className="flex h-screen w-screen overflow-hidden">
+    <div className="flex h-screen w-screen flex-col bg-background text-foreground md:flex-row md:overflow-hidden">
       <SidebarDemo user={session.user} />
       <main className="flex-1 overflow-y-auto">{children}</main>
     </div>
