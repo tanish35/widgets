@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FeedbackList } from "@/app/(app)/dashboard/FeedbackList";
 import api from "@/lib/api";
@@ -17,7 +17,14 @@ interface Project {
   name: string;
   projectKey: string;
   createdAt: Date;
-  feedbacks: Feedback[];
+}
+
+interface PaginationInfo {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+  hasNext: boolean;
+  hasPrev: boolean;
 }
 
 interface ProjectDetailsProps {
@@ -29,10 +36,39 @@ export function ProjectDetails({ project }: ProjectDetailsProps) {
   const [activeFilter, setActiveFilter] = useState<
     "All" | "Bug" | "Feature" | "Other"
   >("All");
-
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
+  const [pagination, setPagination] = useState<PaginationInfo | null>(null);
   const [loading, setLoading] = useState(false);
+  const [feedbacksLoading, setFeedbacksLoading] = useState(false);
 
   const embedSnippet = `<script src="${process.env.NEXT_PUBLIC_APP_URL}/widget.js" data-project-key="${project.projectKey}"></script>`;
+
+  const fetchFeedbacks = async (page = 1, type?: string) => {
+    setFeedbacksLoading(true);
+    try {
+      const params = new URLSearchParams({
+        projectKey: project.projectKey,
+        page: page.toString(),
+        limit: "3",
+      });
+
+      if (type && type !== "All") {
+        params.append("type", type);
+      }
+
+      const response = await api.get(`/get-feedbacks?${params}`);
+      setFeedbacks(response.data.feedbacks);
+      setPagination(response.data.pagination);
+    } catch (error) {
+      console.error("Error fetching feedbacks:", error);
+    } finally {
+      setFeedbacksLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchFeedbacks(1, activeFilter);
+  }, [project.projectKey, activeFilter]);
 
   const handleCopySnippet = () => {
     navigator.clipboard.writeText(embedSnippet);
@@ -49,10 +85,13 @@ export function ProjectDetails({ project }: ProjectDetailsProps) {
     window.location.reload();
   };
 
-  const filteredFeedbacks =
-    activeFilter === "All"
-      ? project.feedbacks
-      : project.feedbacks.filter((f) => f.type === activeFilter);
+  const handleFilterChange = (filter: "All" | "Bug" | "Feature" | "Other") => {
+    setActiveFilter(filter);
+  };
+
+  const handlePageChange = (page: number) => {
+    fetchFeedbacks(page, activeFilter);
+  };
 
   return (
     <div className="space-y-6">
@@ -100,7 +139,7 @@ export function ProjectDetails({ project }: ProjectDetailsProps) {
           {(["All", "Bug", "Feature", "Other"] as const).map((filter) => (
             <button
               key={filter}
-              onClick={() => setActiveFilter(filter)}
+              onClick={() => handleFilterChange(filter)}
               className={`px-3 py-2 text-sm font-medium transition-colors ${
                 activeFilter === filter
                   ? "border-b-2 border-primary text-foreground"
@@ -112,8 +151,17 @@ export function ProjectDetails({ project }: ProjectDetailsProps) {
           ))}
         </div>
         <div className="mt-4">
-          {filteredFeedbacks.length > 0 ? (
-            <FeedbackList feedbacks={filteredFeedbacks} />
+          {feedbacksLoading ? (
+            <p className="py-4 text-center text-sm text-muted-foreground">
+              Loading feedbacks...
+            </p>
+          ) : feedbacks.length > 0 ? (
+            <FeedbackList
+              feedbacks={feedbacks}
+              pagination={pagination}
+              onPageChange={handlePageChange}
+              onFeedbackUpdate={fetchFeedbacks}
+            />
           ) : (
             <p className="py-4 text-center text-sm text-muted-foreground">
               No feedback yet

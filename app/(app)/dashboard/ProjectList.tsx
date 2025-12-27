@@ -7,7 +7,6 @@ export interface Project {
   name: string;
   projectKey: string;
   createdAt: Date;
-  feedbacks: any[];
 }
 
 interface ProjectsListProps {
@@ -40,9 +39,6 @@ export function ProjectsList({
                 {project.projectKey}
               </p>
             </div>
-            <span className="text-xs text-muted-foreground">
-              {project.feedbacks.length ? project.feedbacks.length : 0}{" "}
-            </span>
           </div>
           <p className="mt-2 text-xs text-muted-foreground">
             Created {formatDate(project.createdAt)}
