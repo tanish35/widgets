@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,6 +30,12 @@ export default function RootLayout({
       >
         {children}
       </body>
+      <Script
+        src="https://umami34.vercel.app/script.js"
+        data-website-id="641fa731-151c-4ee1-8db4-3ef563f76aae"
+        strategy="afterInteractive"
+        defer
+      />
     </html>
   );
 }
