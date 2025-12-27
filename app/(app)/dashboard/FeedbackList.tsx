@@ -38,12 +38,10 @@ export function FeedbackList({
   feedbacks,
   pagination,
   onPageChange,
-  onFeedbackUpdate,
 }: FeedbackListProps) {
   const [data, setData] = useState<Feedback[]>(feedbacks);
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
-  // Sync data with props
   useEffect(() => {
     setData(feedbacks);
   }, [feedbacks]);
@@ -75,15 +73,12 @@ export function FeedbackList({
     setLoadingId(feedbackId);
     try {
       const response = await api.post("/analyze-sentiment", { feedbackId });
-      // Update local state immediately for better UX
       const updatedData = data.map((item) =>
         item.id === feedbackId
           ? { ...item, sentiment: response.data.sentiment }
           : item
       );
       setData(updatedData);
-      // Optionally refetch to ensure consistency
-      // onFeedbackUpdate(pagination?.currentPage);
     } catch (error) {
       console.error("Error analyzing sentiment:", error);
     } finally {
@@ -142,7 +137,6 @@ export function FeedbackList({
           ))}
         </TableBody>
       </Table>
-      {/* Pagination Controls */}
       {pagination && pagination.totalPages > 1 && (
         <div className="flex items-center justify-between mt-4">
           <Button
