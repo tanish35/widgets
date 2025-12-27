@@ -20,7 +20,7 @@ const companyLogoSrc = "https://www.tanishm.site/svgs/logo.svg";
 
 export default function SignInPage() {
   const [loading, setLoading] = useState(false);
-  const session = useSession();
+  const { data: session } = useSession();
   if (session) {
     redirect("/dashboard");
   }

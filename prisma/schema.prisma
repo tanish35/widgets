@@ -14,13 +14,6 @@ datasource db {
 }
 
 
-
-enum Sentiment {
-  POSITIVE
-  NEUTRAL
-  NEGATIVE
-}
-
 model User {
   id    String @id @default(cuid())
   email String @unique
@@ -53,7 +46,7 @@ model Feedback {
   id        String       @id @default(cuid())
   message   String
   type      String
-  sentiment Sentiment?
+  sentiment String?
   createdAt DateTime     @default(now())
 
   projectId String

@@ -6,9 +6,10 @@ import { FeedbackList } from "@/app/(app)/dashboard/FeedbackList";
 import api from "@/lib/api";
 
 interface Feedback {
-  id: number;
+  id: string;
   message: string;
   type: "Bug" | "Feature" | "Other";
+  sentiment?: "Positive" | "Neutral" | "Negative";
 }
 
 interface Project {

@@ -10,7 +10,7 @@ export function SplineSceneBasic() {
     <Card className="w-full h-screen  relative overflow-hidden">
       <Spotlight
         className="-top-40 left-0 md:left-60 md:-top-20"
-        fill="white"
+        // fill="white"
       />
 
       <div className="flex h-full flex-col md:flex-row">
@@ -24,7 +24,7 @@ export function SplineSceneBasic() {
             Feedback Pulse helps teams collect, manage, and act on user feedback
             in real time. Embed a lightweight widget on your website, capture
             insights instantly, and manage everything from a powerful admin
-            dashboard — no friction, no clutter.
+            dashboard ; no friction, no clutter.
           </p>
 
           <div className="pt-6 md:pt-10">
@@ -38,7 +38,7 @@ export function SplineSceneBasic() {
         {/* Right content */}
         <div className="order-2 flex-1 relative min-h-[320px] md:min-h-0 flex items-center justify-center">
           <SplineScene
-            scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+            scene="https://prod.spline.design/wMjSw4YBVYUQcYZs/scene.splinecode"
             className="w-full h-full max-h-[480px] md:max-h-none"
           />
         </div>
