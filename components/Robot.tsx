@@ -2,17 +2,11 @@
 
 import { SplineScene } from "@/components/ui/splite";
 import { Card } from "@/components/ui/card";
-import { Spotlight } from "@/components/ui/spotlight";
 import { MediaButton } from "@/components/ui/media-button";
 
 export function SplineSceneBasic() {
   return (
     <Card className="w-full h-screen  relative overflow-hidden">
-      <Spotlight
-        className="-top-40 left-0 md:left-60 md:-top-20"
-        // fill="white"
-      />
-
       <div className="flex h-full flex-col md:flex-row">
         {/* Left content */}
         <div className="order-1 flex-1 md:flex-none md:w-1/3 p-6 md:p-8 relative z-10 flex flex-col justify-center space-y-6">
