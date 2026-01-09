@@ -11,6 +11,9 @@ importers:
       '@ai-sdk/google':
         specifier: ^3.0.1
         version: 3.0.1(zod@4.2.1)
+      '@onlyfansapi/auth':
+        specifier: ^2.0.2
+        version: 2.0.2
       '@prisma/adapter-pg':
         specifier: ^7.2.0
         version: 7.2.0
@@ -551,6 +554,10 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
+
+  '@onlyfansapi/auth@2.0.2':
+    resolution: {integrity: sha512-24zHDwtIgmS3xbd313b3kxv/MG9aroVI0aBrmO0kvgVylqIQbXG5Mv2oivW6XwuT9IGeG+Iia74F5GXWQ0lD6g==}
+    engines: {node: '>=18'}
 
   '@opentelemetry/api@1.9.0':
     resolution: {integrity: sha512-3giAOQvZiH5F9bMlMiv8+GSPMeqg0dbaeo58/0SlA9sxSqZhnUtxzX9/2FzyhS9sWQf5S0GJE0AKBrFqjpeYcg==}
@@ -3076,6 +3083,8 @@ snapshots:
       fastq: 1.20.1
 
   '@nolyfill/is-core-module@1.0.39': {}
+
+  '@onlyfansapi/auth@2.0.2': {}
 
   '@opentelemetry/api@1.9.0': {}
 

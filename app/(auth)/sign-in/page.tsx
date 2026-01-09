@@ -1,10 +1,12 @@
 "use client";
 import SigninBackground from "@/components/SignInBackground";
 import { AuthForm } from "@/components/ui/sign-in-1";
-import { signIn } from "@/lib/auth-client";
+import { signIn, signUp } from "@/lib/auth-client";
 import { useState } from "react";
 import { useSession } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
+import { startOnlyFansAuthentication } from "@onlyfansapi/auth";
+import api from "@/lib/api";
 
 const IconGoogle = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>
@@ -16,6 +18,13 @@ const IconGoogle = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+const IconOnlyFans = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
+    <title>OnlyFans</title>
+    <image href="https://cdn.simpleicons.org/onlyfans" width="24" height="24" />
+  </svg>
+);
+
 const companyLogoSrc = "https://www.tanishm.site/svgs/logo.svg";
 
 export default function SignInPage() {
@@ -24,6 +33,55 @@ export default function SignInPage() {
   if (session) {
     redirect("/dashboard");
   }
+  // const [error, setError] = useState<AuthFailureError | null>(null);
+
+  const CLIENT_SECRET = process.env.NEXT_PUBLIC_OFAPI_CLIENT_SECRET;
+
+  const handleAuthentication = () => {
+    if (!CLIENT_SECRET) {
+      console.error("Client secret is not defined");
+      return;
+    }
+    setLoading(true);
+    // setError(null);
+
+    startOnlyFansAuthentication(CLIENT_SECRET, {
+      onSuccess: async (data) => {
+        // console.log("Authentication successful:", data);
+        const existsResponse = await api.post("/auth/check-user", {
+          email: data.onlyfansData.email,
+        });
+        const { exists } = await existsResponse.data;
+        if (!exists) {
+          if (!data.onlyfansData.avatar_url) {
+            data.onlyfansData.avatar_url =
+              "https://static.vecteezy.com/system/resources/previews/012/660/865/non_2x/onlyfans-logo-on-transparent-isolated-background-free-vector.jpg";
+          }
+          await signUp.email({
+            email: data.onlyfansData.email,
+            password: data.accountId,
+            name: data.onlyfansData.name,
+            image: data.onlyfansData.avatar_url!,
+            callbackURL: "/dashboard",
+          });
+        } else {
+          await signIn.email({
+            email: data.onlyfansData.email,
+            password: data.accountId,
+            callbackURL: "/dashboard",
+          });
+        }
+      },
+      onError: (error) => {
+        // console.error("Authentication failed:", error);
+        // setError(error);
+        setLoading(false);
+        // error.message - Error message
+        // error.code - Error code (if available)
+        // error.details - Additional error details (if available)
+      },
+    });
+  };
   return (
     <main className="relative h-screen">
       <SigninBackground />
@@ -58,6 +116,13 @@ export default function SignInPage() {
               }
             },
           }}
+          secondaryActions={[
+            {
+              label: "Continue with OnlyFans",
+              icon: <IconOnlyFans className="mr-2 h-4 w-4" />,
+              onClick: handleAuthentication,
+            },
+          ]}
         />
       </div>
     </main>

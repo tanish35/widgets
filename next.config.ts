@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       new URL("https://assets.aceternity.com/**"),
       new URL("https://www.gravatar.com/**"),
       new URL("https://lh3.googleusercontent.com/**"),
+      new URL("https://static.vecteezy.com/**"),
     ],
   },
 };
